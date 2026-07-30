@@ -14,5 +14,6 @@ Route::middleware('guest')->group(function(){
 });
 
 Route::middleware('auth')->group(function(){
-    Route::get('/dashboard', [LoginController::class, 'index'])->name('dashboard');
+    Route::view('/dashboard', 'dashboard');
+    Route::post('/logout', [LoginController::class, 'destroy'])->name('logout');
 });

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Auth;
 class LoginController extends Controller
 {
     /**
@@ -11,7 +11,7 @@ class LoginController extends Controller
      */
     public function index()
     {
-        //
+        return redirect('dashboard');
     }
 
     /**
@@ -27,7 +27,19 @@ class LoginController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|min:8'
+        ]);
+
+
+        if(auth()->attempt($validated)){
+            $request->session()->regenerate();
+            return redirect('/dashboard');
+            
+        }else{
+            return back()->withErrors(['email'=>'Incorrect email or password']);
+        }
     }
 
     /**
@@ -57,8 +69,11 @@ class LoginController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request)
     {
-        //
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect('/');
     }
 }
