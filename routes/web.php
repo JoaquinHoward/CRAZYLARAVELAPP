@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\TaskController;
 
 Route::middleware('guest')->group(function(){
     Route::view('/', 'welcome');
@@ -14,6 +15,8 @@ Route::middleware('guest')->group(function(){
 });
 
 Route::middleware('auth')->group(function(){
-    Route::view('/dashboard', 'dashboard');
+    Route::get('/dashboard', [TaskController::class, 'index'])->name('dashboard');
     Route::post('/logout', [LoginController::class, 'destroy'])->name('logout');
+
+    Route::post('/tasks', [TaskController::class, 'store'])->name('tasks.store');
 });
