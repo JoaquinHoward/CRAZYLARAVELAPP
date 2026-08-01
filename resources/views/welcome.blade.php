@@ -72,10 +72,14 @@
             flex-wrap: wrap;
         }
         .btn {
-            display: inline-block;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
             text-decoration: none;
-            border-radius: 0; /* sharp square */
-            padding: 1.25rem 2.5rem;
+            border-radius: 50%;
+            width: 140px;
+            height: 140px;
             font-size: 1.125rem;
             font-weight: 600;
             transition: all 0.3s ease;

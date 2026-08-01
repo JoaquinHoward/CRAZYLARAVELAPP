@@ -84,12 +84,16 @@
             color: var(--accent-blue);
         }
         .btn-submit {
-            width: 100%;
+            width: 120px;
+            height: 120px;
+            margin: 1.5rem auto 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             background-color: var(--accent-blue);
             color: white;
             border: none;
-            border-radius: 0; /* sharp square */
-            padding: 1.25rem;
+            border-radius: 50%;
             font-size: 1.125rem;
             font-weight: 600;
             cursor: pointer;

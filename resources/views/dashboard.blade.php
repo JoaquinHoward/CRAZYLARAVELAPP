@@ -1,58 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+<x-layout>
     <style>
-        :root {
-            --bg-color: #111318;
-            --card-bg: #24272C;
-            --text-main: #FFFFFF;
-            --text-muted: #8E96A4;
-            --accent-blue: #0066FF;
-            --accent-blue-hover: #0052CC;
-        }
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Outfit', sans-serif;
-        }
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            min-height: 100vh;
-            -webkit-font-smoothing: antialiased;
-        }
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1.5rem 2rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        .header-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
-        .logout-btn {
-            background: transparent;
-            color: var(--text-muted);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 0.6rem 1.25rem;
-            border-radius: 0;
-            font-size: 0.95rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .logout-btn:hover {
-            color: var(--text-main);
-            border-color: var(--text-main);
-            background: rgba(255,255,255,0.05);
-        }
         main {
             padding: 4rem 2rem;
             width: 66.666%;
@@ -77,16 +24,20 @@
             background-color: var(--accent-blue);
             color: white;
             border: none;
-            border-radius: 0;
-            padding: 0.75rem 1.5rem;
-            font-size: 0.95rem;
+            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+            display: inline-flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 0.2rem;
+            font-size: 0.85rem;
             font-weight: 600;
+            text-align: center;
             cursor: pointer;
             transition: all 0.3s ease;
             box-shadow: 0 4px 14px 0 rgba(0, 102, 255, 0.39);
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
         }
         .btn-primary:hover {
             background-color: var(--accent-blue-hover);
@@ -206,12 +157,16 @@
         }
         
         .btn-submit {
-            width: 100%;
+            width: 120px;
+            height: 120px;
+            margin: 1.5rem auto 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             background-color: var(--accent-blue);
             color: white;
             border: none;
-            border-radius: 0;
-            padding: 1.25rem;
+            border-radius: 50%;
             font-size: 1.125rem;
             font-weight: 600;
             cursor: pointer;
@@ -249,6 +204,29 @@
             transform: translateY(-4px);
             box-shadow: 0 10px 25px rgba(0,0,0,0.3);
         }
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        .btn-delete {
+            background-color: transparent;
+            color: var(--text-muted);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn-delete:hover {
+            background-color: #8b0000;
+            color: white;
+            border-color: #8b0000;
+        }
         .task-title {
             font-size: 1.25rem;
             font-weight: 600;
@@ -270,16 +248,6 @@
             margin-top: 0.5rem;
         }
     </style>
-</head>
-<body>
-
-    <header>
-        <div class="header-title">Dashboard</div>
-        <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
-            @csrf 
-            <button type="submit" class="logout-btn">Logout</button>
-        </form>
-    </header>
 
     <main>
         <!-- Retained original text items -->
@@ -297,7 +265,20 @@
         <div class="tasks-stack">
             @foreach ($tasks as $task)
                 <div class="task-card">
-                    <h3 class="task-title">{{ $task->title }}</h3>
+                    <div class="task-header">
+                        <h3 class="task-title">{{ $task->title }}</h3>
+                        
+                        <!-- Add your delete form logic here! -->
+                        <form action="{{ route('destroy', $task) }}" method="POST">
+                            @csrf 
+                            @method('DELETE')
+                            <!-- Fill in your Blade directives here -->
+                            <button type="submit" class="btn-delete" title="Delete Task">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                            </button>
+                        </form>
+                    </div>
+
                     @if($task->description)
                         <p class="task-desc">{{ $task->description }}</p>
                     @endif
@@ -384,5 +365,4 @@
             });
         });
     </script>
-</body>
-</html>
+</x-layout>
