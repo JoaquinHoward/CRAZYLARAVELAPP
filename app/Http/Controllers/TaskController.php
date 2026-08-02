@@ -59,9 +59,10 @@ class TaskController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Task $task)
     {
-        //
+        $task->update(['is_completed' => true]);
+        return back();
     }
 
     /**

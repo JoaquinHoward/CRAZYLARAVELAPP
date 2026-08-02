@@ -204,6 +204,13 @@
             transform: translateY(-4px);
             box-shadow: 0 10px 25px rgba(0,0,0,0.3);
         }
+        .task-card.task-completed {
+            opacity: 0.6;
+        }
+        .task-card.task-completed .task-title {
+            text-decoration: line-through;
+            color: var(--text-muted);
+        }
         .task-header {
             display: flex;
             justify-content: space-between;
@@ -226,6 +233,29 @@
             background-color: #8b0000;
             color: white;
             border-color: #8b0000;
+        }
+        .btn-update {
+            background-color: transparent;
+            color: var(--text-muted);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn-update:hover {
+            background-color: #15803d; /* dark green */
+            color: white;
+            border-color: #15803d;
+        }
+        .task-actions {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
         }
         .task-title {
             font-size: 1.25rem;
@@ -264,19 +294,31 @@
 
         <div class="tasks-stack">
             @foreach ($tasks as $task)
-                <div class="task-card">
+                <div class="task-card {{ $task->is_completed ? 'task-completed' : '' }}">
                     <div class="task-header">
                         <h3 class="task-title">{{ $task->title }}</h3>
                         
-                        <!-- Add your delete form logic here! -->
-                        <form action="{{ route('destroy', $task) }}" method="POST">
-                            @csrf 
-                            @method('DELETE')
-                            <!-- Fill in your Blade directives here -->
-                            <button type="submit" class="btn-delete" title="Delete Task">
-                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                            </button>
-                        </form>
+                        <div class="task-actions">
+                            @if(!$task->is_completed)
+                                <!-- update is equivalent to marking the task as completed -->
+                                <form action="{{ route('tasks.update', $task) }}" method="POST">
+                                    @csrf 
+                                    @method('PATCH')
+                                    <button type="submit" class="btn-update" title="Mark as Completed">
+                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                    </button>
+                                </form>
+                            @endif
+
+                            <!-- Add your delete form logic here! -->
+                            <form action="{{ route('tasks.destroy', $task) }}" method="POST">
+                                @csrf 
+                                @method('DELETE')
+                                <button type="submit" class="btn-delete" title="Delete Task">
+                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                </button>
+                            </form>
+                        </div>
                     </div>
 
                     @if($task->description)
