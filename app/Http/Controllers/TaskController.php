@@ -12,7 +12,7 @@ class TaskController extends Controller
      */
     public function index()
     {
-        $tasks = auth()->user()->tasks()->latest()->get();
+        $tasks = auth()->user()->tasks()->orderBy('is_completed')->get();
         return view('dashboard', ['tasks'=>$tasks]);
     }
 
@@ -61,7 +61,8 @@ class TaskController extends Controller
      */
     public function update(Task $task)
     {
-        $task->update(['is_completed' => true]);
+        // $task->update(['is_completed' => true]);
+        $task->update(['is_completed' => !$task->is_completed]);
         return back();
     }
 

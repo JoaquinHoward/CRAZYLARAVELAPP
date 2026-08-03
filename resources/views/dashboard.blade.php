@@ -193,28 +193,20 @@
         .task-card {
             background-color: var(--card-bg);
             border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 0; /* sharp square */
-            padding: 1.5rem;
+            border-radius: 0.75rem; /* rounded like the image */
+            padding: 1.25rem 1.5rem;
             display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
+            flex-direction: row;
+            align-items: center;
+            gap: 1.25rem;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
         .task-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-        }
-        .task-card.task-completed {
-            opacity: 0.6;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
         }
         .task-card.task-completed .task-title {
-            text-decoration: line-through;
             color: var(--text-muted);
-        }
-        .task-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
         }
         .btn-delete {
             background-color: transparent;
@@ -234,33 +226,52 @@
             color: white;
             border-color: #8b0000;
         }
-        .btn-update {
-            background-color: transparent;
-            color: var(--text-muted);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
+        .checkbox-empty {
             width: 28px;
             height: 28px;
+            border-radius: 50%;
+            border: 2px solid var(--text-muted);
+            background-color: transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0;
+        }
+        .checkbox-empty:hover {
+            border-color: #65a30d;
+            background-color: rgba(101, 163, 13, 0.1);
+        }
+        .checkbox-completed {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background-color: #65a30d;
+            border: 2px solid #84cc16;
+            color: white;
             display: flex;
             justify-content: center;
             align-items: center;
             cursor: pointer;
+            padding: 0;
             transition: all 0.3s ease;
         }
-        .btn-update:hover {
-            background-color: #15803d; /* dark green */
-            color: white;
-            border-color: #15803d;
+        .checkbox-completed:hover {
+            background-color: #4d7c0f;
+            border-color: #65a30d;
         }
-        .task-actions {
+        .task-content {
+            flex-grow: 1;
             display: flex;
-            gap: 0.5rem;
-            align-items: center;
+            flex-direction: column;
+            gap: 0.25rem;
         }
         .task-title {
-            font-size: 1.25rem;
-            font-weight: 600;
+            font-size: 1.15rem;
+            font-weight: 500;
             color: var(--text-main);
+            margin: 0;
         }
         .task-desc {
             font-size: 1rem;
@@ -281,8 +292,7 @@
 
     <main>
         <!-- Retained original text items -->
-        <h1 class="greeting">Welcome back!</h1>
-        <p class="subtitle">What a cutie! Well begun is half done. - Aristotle</p>
+        <p class="subtitle">Well begun is half done. - Aristotle</p>
 
         <div class="action-bar">
             <!-- Button to trigger the modal -->
@@ -295,41 +305,47 @@
         <div class="tasks-stack">
             @foreach ($tasks as $task)
                 <div class="task-card {{ $task->is_completed ? 'task-completed' : '' }}">
-                    <div class="task-header">
-                        <h3 class="task-title">{{ $task->title }}</h3>
-                        
-                        <div class="task-actions">
-                            @if(!$task->is_completed)
-                                <!-- update is equivalent to marking the task as completed -->
-                                <form action="{{ route('tasks.update', $task) }}" method="POST">
-                                    @csrf 
-                                    @method('PATCH')
-                                    <button type="submit" class="btn-update" title="Mark as Completed">
-                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                                    </button>
-                                </form>
-                            @endif
-
-                            <!-- Add your delete form logic here! -->
-                            <form action="{{ route('tasks.destroy', $task) }}" method="POST">
-                                @csrf 
-                                @method('DELETE')
-                                <button type="submit" class="btn-delete" title="Delete Task">
-                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                    
+                    <!-- Checkbox Area (Left) -->
+                    <div class="task-checkbox-area">
+                        <form action="{{ route('tasks.update', $task) }}" method="POST" style="margin: 0;">
+                            @csrf 
+                            @method('PATCH')
+                            @if($task->is_completed)
+                                <button type="submit" class="checkbox-completed" title="Mark as Incomplete">
+                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16" stroke-width="2.5" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
                                 </button>
-                            </form>
-                        </div>
+                            @else
+                                <button type="submit" class="checkbox-empty" title="Mark as Completed"></button>
+                            @endif
+                        </form>
                     </div>
 
-                    @if($task->description)
-                        <p class="task-desc">{{ $task->description }}</p>
-                    @endif
-                    @if($task->due_date)
-                        <div class="task-meta">
-                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                            Due: {{ $task->due_date }}
-                        </div>
-                    @endif
+                    <!-- Task Content (Middle) -->
+                    <div class="task-content">
+                        <h3 class="task-title">{{ $task->title }}</h3>
+                        @if($task->description)
+                            <p class="task-desc">{{ $task->description }}</p>
+                        @endif
+                        @if($task->due_date)
+                            <div class="task-meta">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="14" height="14" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                Due: {{ $task->due_date }}
+                            </div>
+                        @endif
+                    </div>
+
+                    <!-- Delete Action (Right) -->
+                    <div class="task-delete-area">
+                        <form action="{{ route('tasks.destroy', $task) }}" method="POST" style="margin: 0;">
+                            @csrf 
+                            @method('DELETE')
+                            <button type="submit" class="btn-delete" title="Delete Task">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                            </button>
+                        </form>
+                    </div>
+
                 </div>
             @endforeach
         </div>
