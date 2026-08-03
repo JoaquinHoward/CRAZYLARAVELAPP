@@ -335,6 +335,7 @@
                         @endif
                     </div>
 
+
                     <!-- Delete Action (Right) -->
                     <div class="task-delete-area">
                         <form action="{{ route('tasks.destroy', $task) }}" method="POST" style="margin: 0;">
@@ -349,6 +350,57 @@
                 </div>
             @endforeach
         </div>
+
+        @if($done_tasks->count() > 0)
+            <h2 class="greeting" style="font-size: 1.8rem; margin-top: 3rem; margin-bottom: 1.5rem;">Completed Tasks</h2>
+            <div class="tasks-stack" style="margin-top: 0;">
+                @foreach ($done_tasks as $task)
+                    <div class="task-card {{ $task->is_completed ? 'task-completed' : '' }}">
+                        
+                        <!-- Checkbox Area (Left) -->
+                        <div class="task-checkbox-area">
+                            <form action="{{ route('tasks.update', $task) }}" method="POST" style="margin: 0;">
+                                @csrf 
+                                @method('PATCH')
+                                @if($task->is_completed)
+                                    <button type="submit" class="checkbox-completed" title="Mark as Incomplete">
+                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16" stroke-width="2.5" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+                                    </button>
+                                @else
+                                    <button type="submit" class="checkbox-empty" title="Mark as Completed"></button>
+                                @endif
+                            </form>
+                        </div>
+
+                        <!-- Task Content (Middle) -->
+                        <div class="task-content">
+                            <h3 class="task-title">{{ $task->title }}</h3>
+                            @if($task->description)
+                                <p class="task-desc">{{ $task->description }}</p>
+                            @endif
+                            @if($task->due_date)
+                                <div class="task-meta">
+                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="14" height="14" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                    Due: {{ $task->due_date }}
+                                </div>
+                            @endif
+                        </div>
+
+                        <!-- Delete Action (Right) -->
+                        <div class="task-delete-area">
+                            <form action="{{ route('tasks.destroy', $task) }}" method="POST" style="margin: 0;">
+                                @csrf 
+                                @method('DELETE')
+                                <button type="submit" class="btn-delete" title="Delete Task">
+                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                </button>
+                            </form>
+                        </div>
+
+                    </div>
+                @endforeach
+            </div>
+        @endif
     </main>
 
     <!-- Modal Popup Container -->

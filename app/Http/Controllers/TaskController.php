@@ -12,8 +12,9 @@ class TaskController extends Controller
      */
     public function index()
     {
-        $tasks = auth()->user()->tasks()->orderBy('is_completed')->get();
-        return view('dashboard', ['tasks'=>$tasks]);
+        $tasks = auth()->user()->tasks()->where('is_completed', false)->orderByRaw('due_date IS NULL')->orderBy('due_date', 'asc')->get();
+        $done_tasks = auth()->user()->tasks()->where('is_completed', true)->orderBy('updated_at', 'asc')->get();
+        return view('dashboard', compact('tasks', 'done_tasks'));
     }
 
     /**
