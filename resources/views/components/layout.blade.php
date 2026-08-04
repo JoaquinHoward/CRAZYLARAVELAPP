@@ -75,7 +75,7 @@
 </head>
 <body>
     <header>
-        <div class="header-title">tasks</div>
+        <div class="header-title">{{auth()->user()->name}}</div>
         <nav>
             <a href="/dashboard" style="color: var(--text-main);">Tasks</a>
             <a href="{{ route('finance.index') }}">Finance</a>

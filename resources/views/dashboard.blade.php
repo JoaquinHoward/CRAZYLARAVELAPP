@@ -12,8 +12,17 @@
         }
         .subtitle {
             color: var(--text-muted);
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             margin-bottom: 3rem;
+            font-style: italic;
+            letter-spacing: 0.5px;
+        }
+        .quote-author {
+            font-weight: 600;
+            font-style: normal;
+            color: var(--accent-blue);
+            font-size: 1rem;
+            margin-left: 0.25rem;
         }
         .action-bar {
             display: flex;
@@ -291,8 +300,7 @@
     </style>
 
     <main>
-        <!-- Retained original text items -->
-        <p class="subtitle">Well begun is half done. - Aristotle</p>
+        <p class="subtitle">{!! Illuminate\Foundation\Inspiring::quote() !!}</p>
 
         <div class="action-bar">
             <!-- Button to trigger the modal -->

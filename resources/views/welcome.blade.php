@@ -120,7 +120,8 @@
     <div class="bg-glow"></div>
     <div class="container">
         <h1>Welcome</h1>
-        <p>Experience the modern standard. Join us today to unlock a beautiful, seamless interface.</p>
+        <p>"Order your soul. Reduce your wants." <br>- Augustine</p>
+        
         
         <div class="button-group">
             <a href="{{ route('register') }}" class="btn btn-primary">Sign up</a>
