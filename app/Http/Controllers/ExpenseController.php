@@ -4,16 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class FinanceController extends Controller
+class ExpenseController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $categories = auth()->user()->categories()->orderBy('name','asc')->get();
-
-        return view('finance.index', compact('categories'));
+        //
     }
 
     /**
@@ -21,7 +19,7 @@ class FinanceController extends Controller
      */
     public function create()
     {
-        //
+        
     }
 
     /**

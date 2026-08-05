@@ -3,17 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
-class FinanceController extends Controller
+use Illuminate\Validation\Rule;
+class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $categories = auth()->user()->categories()->orderBy('name','asc')->get();
-
-        return view('finance.index', compact('categories'));
+        //
     }
 
     /**
@@ -29,7 +27,14 @@ class FinanceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'name' => ['required', 'string', Rule::unique('categories')->where('user_id', auth()->id())]
+        ]);
+
+        auth()->user()->categories()->create($validated);
+        return back();
+
+
     }
 
     /**

@@ -4,9 +4,14 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\TaskController;
+
 use App\Http\Controllers\FinanceController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ExpenseController;
+
 use App\Http\Controllers\HabitController;
 use App\Http\Controllers\JournalController;
+
 
 Route::middleware('guest')->group(function(){
     Route::view('/', 'welcome');
@@ -26,6 +31,11 @@ Route::middleware('auth')->group(function(){
     Route::patch('/task/{task}', [TaskController::class, 'update'])->name('tasks.update');
 
     Route::get('/finance', [FinanceController::class, 'index'])->name('finance.index');
+    Route::post('/finance', [FinanceController::class, 'create']);
+
+    Route::post('/category', [CategoryController::class, 'store'])->name('category.store');
+    Route::post('/expense', [ExpenseController::class, 'store'])->name('expense.store');
+
     Route::get('/journal', [JournalController::class, 'index'])->name('journal.index');
     Route::get('/habits', [HabitController::class, 'index'])->name('habits.index');
 });
