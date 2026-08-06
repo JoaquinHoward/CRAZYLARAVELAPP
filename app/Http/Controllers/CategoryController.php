@@ -11,7 +11,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //
+        
     }
 
     /**
@@ -33,8 +33,6 @@ class CategoryController extends Controller
 
         auth()->user()->categories()->create($validated);
         return back();
-
-
     }
 
     /**

@@ -11,7 +11,7 @@ class ExpenseController extends Controller
      */
     public function index()
     {
-        //
+        
     }
 
     /**
@@ -27,7 +27,15 @@ class ExpenseController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string',
+            'amount' => 'required|numeric',
+            'date' => 'required|date',
+            'category_id' => 'required|exists:categories,id'
+        ]);
+
+        auth()->user()->expenses()->create($validated);
+        return back();
     }
 
     /**

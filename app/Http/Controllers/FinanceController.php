@@ -11,8 +11,7 @@ class FinanceController extends Controller
      */
     public function index()
     {
-        $categories = auth()->user()->categories()->orderBy('name','asc')->get();
-
+        $categories = auth()->user()->categories()->withSum('expenses', 'amount')->get();
         return view('finance.index', compact('categories'));
     }
 
