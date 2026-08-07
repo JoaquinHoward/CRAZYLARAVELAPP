@@ -27,8 +27,10 @@ Route::middleware('auth')->group(function(){
     Route::post('/logout', [LoginController::class, 'destroy'])->name('logout');
 
     Route::post('/tasks', [TaskController::class, 'store'])->name('tasks.store');
+    Route::delete('/tasks/completed', [TaskController::class, 'destroyCompleted'])->name('tasks.destroyCompleted');
     Route::delete('/tasks/{task}', [TaskController::class, 'destroy'])->name('tasks.destroy');
     Route::patch('/task/{task}', [TaskController::class, 'update'])->name('tasks.update');
+    
 
     Route::get('/finance', [FinanceController::class, 'index'])->name('finance.index');
     Route::post('/finance', [FinanceController::class, 'create']);

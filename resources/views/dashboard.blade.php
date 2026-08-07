@@ -62,7 +62,17 @@
         </div>
 
         @if($done_tasks->count() > 0)
-            <h2 class="greeting" style="font-size: 1.8rem; margin-top: 3rem; margin-bottom: 1.5rem;">Completed Tasks</h2>
+            <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 3rem; margin-bottom: 1.5rem;">
+                <h2 class="greeting" style="font-size: 1.8rem; margin: 0;">Completed Tasks</h2>
+                <form action="{{ route('tasks.destroyCompleted') }}" method="POST" style="margin: 0;">
+                    @csrf 
+                    @method('DELETE')
+                    <button type="submit" style="background-color: transparent; color: var(--text-muted); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 50%; width: 45px; height: 45px; display: inline-flex; flex-direction: column; justify-content: center; align-items: center; gap: 0.1rem; font-size: 0.65rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; box-shadow: none;" onmouseover="this.style.backgroundColor='#8b0000'; this.style.color='white'; this.style.borderColor='#8b0000'; this.style.boxShadow='0 4px 12px 0 rgba(139, 0, 0, 0.4)';" onmouseout="this.style.backgroundColor='transparent'; this.style.color='var(--text-muted)'; this.style.borderColor='rgba(255, 255, 255, 0.1)'; this.style.boxShadow='none';" title="Clear All Completed Tasks">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="14" height="14" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                        All
+                    </button>
+                </form>
+            </div>
             <div class="tasks-stack" style="margin-top: 0;">
                 @foreach ($done_tasks as $task)
                     <div class="task-card {{ $task->is_completed ? 'task-completed' : '' }}">

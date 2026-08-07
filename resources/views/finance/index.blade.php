@@ -15,7 +15,6 @@
                 New Expense
             </button>
         </div>
-    </main>
 
     <!-- Category Modal -->
     <div class="modal-overlay" id="categoryModal">
@@ -80,9 +79,24 @@
         </div>
     </div>
 
-    @foreach($categories as $category)
-    <p> {{ $category->name }} : ${{ number_format($category->expenses_sum_amount ?? 0, 2) }} 💰</p>
-    @endforeach
+
+    <h2 class="greeting" style="font-size: 1.8rem; margin-top: 3rem; margin-bottom: 1.5rem;">Category Totals</h2>
+    <div class="tasks-stack" style="margin-top: 0;">
+        @foreach($categories as $category)
+        <div class="task-card" style="justify-content: space-between;">
+            <div class="task-content">
+                <h3 class="task-title" style="display: flex; align-items: center; gap: 0.5rem;">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20" style="color: var(--text-muted);" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg>
+                    {{ $category->name }}
+                </h3>
+            </div>
+            <div style="font-size: 1.5rem; font-weight: 700; color: var(--accent-blue);">
+                ${{ number_format($category->expenses_sum_amount ?? 0, 2) }}
+            </div>
+        </div>
+        @endforeach
+    </div>
+    </main>
 
     <!-- Script for modals -->
     <script>
