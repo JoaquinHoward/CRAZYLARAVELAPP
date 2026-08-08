@@ -142,17 +142,13 @@
             height: 100%;
             background-color: rgba(0, 0, 0, 0.7);
             backdrop-filter: blur(5px);
-            display: flex;
+            display: none;
             justify-content: center;
             align-items: center;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
             z-index: 1000;
         }
         .modal-overlay.active {
-            opacity: 1;
-            visibility: visible;
+            display: flex;
         }
         .modal-content {
             background-color: var(--bg-color);
@@ -160,14 +156,9 @@
             width: 100%;
             max-width: 450px;
             padding: 2.5rem;
-            transform: translateY(20px);
-            transition: all 0.3s ease;
             box-shadow: 0 20px 50px rgba(0,0,0,0.5);
             border: 1px solid rgba(255, 255, 255, 0.05);
             position: relative;
-        }
-        .modal-overlay.active .modal-content {
-            transform: translateY(0);
         }
         .modal-close {
             position: absolute;

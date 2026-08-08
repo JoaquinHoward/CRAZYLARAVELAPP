@@ -82,5 +82,11 @@ class TaskController extends Controller
         return back();
     }
 
+    public function destroyCurrent()
+    {
+        auth()->user()->tasks()->where('is_completed', false)->delete();
+        return back();
+    }
+
     
 }

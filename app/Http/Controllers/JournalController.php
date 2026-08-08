@@ -11,7 +11,7 @@ class JournalController extends Controller
      */
     public function index()
     {
-        //
+        return view('journal.index');
     }
 
     /**
