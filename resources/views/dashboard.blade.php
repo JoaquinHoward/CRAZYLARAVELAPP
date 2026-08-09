@@ -107,6 +107,9 @@
                             </form>
                         </div>
 
+                       <button onclick="openEditModal({{ $task->id }}, '{{ addslashes($task->title) }}', '{{ addslashes($task->description) }}', '{{ $task->due_date }}')" class="btn-delete" title="Edit Task" style="font-size: 1.1rem; border: none; background: transparent; outline: none;">✎</button>
+
+
                         <!-- Task Content (Middle) -->
                         <div class="task-content">
                             <h3 class="task-title">{{ $task->title }}</h3>

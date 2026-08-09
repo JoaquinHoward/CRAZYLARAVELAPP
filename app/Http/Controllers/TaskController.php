@@ -57,6 +57,8 @@ class TaskController extends Controller
         return view('edit-task', compact('task'));
     }
 
+    
+
     /**
      * Update the specified resource in storage.
      */
@@ -90,6 +92,7 @@ class TaskController extends Controller
         auth()->user()->tasks()->where('is_completed', false)->delete();
         return back();
     }
+
 
     
 }
