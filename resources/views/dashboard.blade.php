@@ -44,6 +44,8 @@
                         </form>
                     </div>
 
+                    <button onclick="openEditModal({{ $task->id }}, '{{ addslashes($task->title) }}', '{{ addslashes($task->description) }}', '{{ $task->due_date }}')" class="btn-delete" title="Edit Task" style="font-size: 1.1rem; border: none; background: transparent; outline: none;">✎</button>
+
                     <!-- Task Content (Middle) -->
                     <div class="task-content">
                         <h3 class="task-title">{{ $task->title }}</h3>
@@ -175,6 +177,45 @@
         </div>
     </div>
 
+    <!-- Edit Modal Popup Container -->
+    <div class="modal-overlay" id="editTaskModal">
+        <div class="modal-content">
+            <button class="modal-close" id="closeEditModalBtn">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="24" height="24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            
+            <h2 class="modal-title">Edit Task</h2>
+            
+            <form id="editTaskForm" method="POST" action="">
+                @csrf
+                @method('PATCH')
+                
+                <div class="form-group">
+                    <div class="input-wrapper">
+                        <input type="text" id="editTitle" name="title" placeholder="Title" required>
+                        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="input-wrapper">
+                        <input type="text" id="editDescription" name="description" placeholder="Description">
+                        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path></svg>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="input-wrapper">
+                        <input type="date" id="editDueDate" name="due_date" >
+                        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-submit">Save</button>
+            </form>
+        </div>
+    </div>
+
     <!-- Modal interactivity script -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -200,10 +241,36 @@
                 }
             });
             
+            // Edit Modal Logic
+            const editModal = document.getElementById('editTaskModal');
+            const closeEditBtn = document.getElementById('closeEditModalBtn');
+
+            window.openEditModal = function(taskId, title, description, dueDate) {
+                document.getElementById('editTaskForm').action = '/task/' + taskId;
+                document.getElementById('editTitle').value = title;
+                document.getElementById('editDescription').value = description || '';
+                document.getElementById('editDueDate').value = dueDate || '';
+                editModal.classList.add('active');
+            };
+
+            function closeEditModal() {
+                editModal.classList.remove('active');
+            }
+
+            closeEditBtn.addEventListener('click', closeEditModal);
+
+            // Close on overlay click for edit modal
+            editModal.addEventListener('click', function(e) {
+                if (e.target === editModal) {
+                    closeEditModal();
+                }
+            });
+
             // Close on Escape key
             document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape' && modal.classList.contains('active')) {
-                    closeModal();
+                if (e.key === 'Escape') {
+                    if (modal.classList.contains('active')) closeModal();
+                    if (editModal.classList.contains('active')) closeEditModal();
                 }
             });
         });
