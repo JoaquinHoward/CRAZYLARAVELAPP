@@ -33,7 +33,6 @@ Route::middleware('auth')->group(function(){
     Route::patch('/task/{task}', [TaskController::class, 'update'])->name('tasks.update');
     Route::get('/tasks/{task}/edit', [TaskController::class, 'edit'])->name('tasks.edit');
     
-
     Route::get('/finance', [FinanceController::class, 'index'])->name('finance.index');
     Route::post('/finance', [FinanceController::class, 'create']);
 
