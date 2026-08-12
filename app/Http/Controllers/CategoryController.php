@@ -29,7 +29,8 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => ['required', 'string', Rule::unique('categories')->where('user_id', auth()->id())]
+            'name' => ['required', 'string', Rule::unique('categories')->where('user_id', auth()->id())],
+            'type' => ['required', 'in:income,expense']
         ]);
 
         auth()->user()->categories()->create($validated);
@@ -58,7 +59,7 @@ class CategoryController extends Controller
     public function update(Request $request, Category $category)
     {
         $validated = $request->validate([
-           'name' => ['required', 'string', Rule::unique('categories')->where('user_id', auth()->id())]
+           'name' => ['required', 'string', Rule::unique('categories')->where('user_id', auth()->id())->ignore($category->id)]
         ]);
         $category->update($validated);
         return back();

@@ -37,6 +37,7 @@ Route::middleware('auth')->group(function(){
     Route::post('/finance', [FinanceController::class, 'create']);
 
     Route::post('/category', [CategoryController::class, 'store'])->name('category.store');
+    Route::patch('/category/{category}', [CategoryController::class, 'update'])->name('category.update');
     Route::post('/expense', [ExpenseController::class, 'store'])->name('expense.store');
 
     Route::get('/journal', [JournalController::class, 'index'])->name('journal.index');

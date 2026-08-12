@@ -43,8 +43,12 @@
                 <div style="font-size: 1.2rem; font-weight: 600; color: #fff;">
                     PHP {{ number_format($category->expenses_sum_amount ?? 0, 2) }}
                 </div>
+                <button onclick="openEditModal({{ $category->id }}, '{{ addslashes($category->name) }}')" class="btn-delete" title="Edit Category" style="font-size: 1.1rem; border: none; background: transparent; outline: none;">✎</button>
+
             </div>
+
             @endforeach
+            
         </div>
         
         <style>
@@ -129,12 +133,38 @@
                 </form>
             </div>
         </div>
+        <!-- Edit Category Modal -->
+        <div class="modal-overlay" id="editCategoryModal">
+            <div class="modal-content">
+                <button class="modal-close" onclick="document.getElementById('editCategoryModal').classList.remove('active')">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="24" height="24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+                <h2 class="modal-title">Edit Category</h2>
+                <form id="editCategoryForm" method="POST" action="">
+                    @csrf
+                    @method('PATCH')
+                    <div class="form-group">
+                        <div class="input-wrapper">
+                            <input type="text" id="editCategoryNameInput" name="name" placeholder="Category Name" required>
+                            <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-submit">Save</button>
+                </form>
+            </div>
+        </div>
 
         
     </main>
 
     <!-- Script for modals -->
     <script>
+
+        window.openEditModal = function(id, name) {
+            document.getElementById('editCategoryForm').action = '/category/' + id;
+            document.getElementById('editCategoryNameInput').value = name;
+            document.getElementById('editCategoryModal').classList.add('active');
+        }
 
         window.filterCategories = function(){
             const type = document.querySelector('input[name="transaction_type"]:checked').value;
