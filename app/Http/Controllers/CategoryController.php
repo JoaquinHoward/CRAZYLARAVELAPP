@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use App\Models\Category;
 class CategoryController extends Controller
 {
     /**
@@ -54,9 +55,13 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Category $category)
     {
-        //
+        $validated = $request->validate([
+           'name' => ['required', 'string', Rule::unique('categories')->where('user_id', auth()->id())]
+        ]);
+        $category->update($validated);
+        return back();
     }
 
     /**
