@@ -36,20 +36,26 @@
 
         <div style="display: flex; gap: 1rem; overflow-x: auto; padding-bottom: 1rem; scrollbar-width: none;">
             @foreach($categories as $category)
-            <div style="background-color: #17181c; border-radius: 1.5rem; padding: 1.5rem; min-width: 180px; flex-shrink: 0; border: 1px solid rgba(255, 255, 255, 0.05);">
-                <h3 style="font-size: 1.3rem; font-weight: 600; margin: 0 0 1.5rem 0; color: #fff;">
+            <div style="background-color: #17181c; border-radius: 1.5rem; padding: 1.5rem; min-width: 180px; flex-shrink: 0; border: 1px solid rgba(255, 255, 255, 0.05); position: relative;">
+                <!-- Edit Button positioned at top right -->
+                <button onclick="openEditModal({{ $category->id }}, '{{ addslashes($category->name) }}')" title="Edit Category Name" style="position: absolute; top: 1.25rem; right: 1.25rem; background: rgba(255,255,255,0.05); border: none; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #888; transition: all 0.2s ease;" onmouseover="this.style.color='#fff'; this.style.background='rgba(255,255,255,0.15)';" onmouseout="this.style.color='#888'; this.style.background='rgba(255,255,255,0.05)';">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                </button>
+                <h3 style="font-size: 1.3rem; font-weight: 600; margin: 0 0 1.5rem 0; color: #fff; padding-right: 2rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                     {{ $category->name }}
                 </h3>
                 <div style="font-size: 1.2rem; font-weight: 600; color: #fff;">
                     PHP {{ number_format($category->expenses_sum_amount ?? 0, 2) }}
                 </div>
-                <button onclick="openEditModal({{ $category->id }}, '{{ addslashes($category->name) }}')" class="btn-delete" title="Edit Category" style="font-size: 1.1rem; border: none; background: transparent; outline: none;">✎</button>
-
             </div>
 
             @endforeach
             
         </div>
+        //display expenses 
+        @foreach($items as $item)
+            <p> {{ $item->name }} {{ $item->date  }} {{ $item->amount }} {{ $item->category_id }} </p>
+        @endforeach
         
         <style>
             /* Hide scrollbar for webkit browsers */
@@ -157,6 +163,8 @@
         
     </main>
 
+
+
     <!-- Script for modals -->
     <script>
 
@@ -205,6 +213,7 @@
             setupModal('categoryModal', 'openCategoryModalBtn', 'closeCategoryModalBtn');
             setupModal('expenseModal', 'openExpenseModalBtn', 'closeExpenseModalBtn');
         });
+
         
     </script>
 </x-layout>

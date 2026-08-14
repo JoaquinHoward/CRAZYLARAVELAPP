@@ -12,7 +12,10 @@ class FinanceController extends Controller
     public function index()
     {
         $categories = auth()->user()->categories()->withSum('expenses', 'amount')->get();
-        return view('finance.index', compact('categories'));
+
+        $expenses = auth()->user()->expenses()->latest('date')->get();
+
+        return view('finance.index', compact('categories', 'expenses'));
     }
 
     /**

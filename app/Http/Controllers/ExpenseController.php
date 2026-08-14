@@ -11,7 +11,8 @@ class ExpenseController extends Controller
      */
     public function index()
     {
-        
+        $expenses = auth()->user()->expenses()->withSum('expenses', 'amount')->get();
+        return view('finance.index', compact($expenses));
     }
 
     /**
