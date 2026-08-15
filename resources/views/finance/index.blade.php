@@ -52,10 +52,36 @@
             @endforeach
             
         </div>
-        //display expenses 
-        @foreach($items as $item)
-            <p> {{ $item->name }} {{ $item->date  }} {{ $item->amount }} {{ $item->category_id }} </p>
-        @endforeach
+        <!-- Recent Transactions -->
+        <div style="margin-top: 2rem; margin-bottom: 3rem;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 1rem;">
+                <h2 style="font-size: 1.5rem; font-weight: 600; margin: 0; color: #fff;">Recent Transactions</h2>
+            </div>
+            <div style="background-color: #17181c; border-radius: 1.5rem; border: 1px solid rgba(255, 255, 255, 0.05); overflow: hidden;">
+                @if($expenses->isEmpty())
+                    <div style="padding: 2rem; text-align: center; color: #888; font-size: 1rem;">
+                        No transactions found.
+                    </div>
+                @else
+                    @foreach($expenses as $expense)
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 1.25rem 1.5rem; border-bottom: 1px solid rgba(255, 255, 255, 0.05);">
+                            <div style="display: flex; align-items: center; gap: 1rem;">
+                                <div style="width: 40px; height: 40px; border-radius: 50%; background-color: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; color: #888;">
+                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                                </div>
+                                <div>
+                                    <div style="color: #fff; font-weight: 600; font-size: 1.1rem; margin-bottom: 0.2rem;">{{ $expense->name }}</div>
+                                    <div style="color: #888; font-size: 0.85rem;">{{ \Carbon\Carbon::parse($expense->date)->format('M d, Y') }}</div>
+                                </div>
+                            </div>
+                            <div style="font-weight: 700; font-size: 1.1rem; color: #fff;">
+                                PHP {{ number_format($expense->amount, 2) }}
+                            </div>
+                        </div>
+                    @endforeach
+                @endif
+            </div>
+        </div>
         
         <style>
             /* Hide scrollbar for webkit browsers */

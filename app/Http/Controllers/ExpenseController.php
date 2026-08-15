@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Expense;
 
 class ExpenseController extends Controller
 {
@@ -50,24 +51,36 @@ class ExpenseController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Expense $expense)
     {
-        //
+        
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Expense $expense)
     {
-        //
+        abort_if($expense->user_id !== auth()->id(), 403);
+
+        $validated = $request->validate([
+            'name' => 'required|string',
+            'amount' => 'required|numeric',
+            'date' => 'required|date',
+            'category_id' => 'required|exists:categories,id'
+        ]);
+
+        $expense->update($validated);
+        return back();
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Expense $expense)
     {
-        //
+        abort_if($expense->user_id !== auth()->id(), 403);
+        $expense->delete();
+        return back();
     }
 }

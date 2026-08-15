@@ -36,6 +36,9 @@ Route::middleware('auth')->group(function(){
     Route::get('/finance', [FinanceController::class, 'index'])->name('finance.index');
     Route::post('/finance', [FinanceController::class, 'create']);
 
+    Route::patch('/expense/{expense}', [ExpenseController::class, 'update'])->name('expense.update');
+    Route::delete('/expense/{expense}', [ExpenseController::class, 'destroy'])->name('expense.destroy');
+
     Route::post('/category', [CategoryController::class, 'store'])->name('category.store');
     Route::patch('/category/{category}', [CategoryController::class, 'update'])->name('category.update');
     Route::post('/expense', [ExpenseController::class, 'store'])->name('expense.store');
