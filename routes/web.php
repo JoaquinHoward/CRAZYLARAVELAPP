@@ -41,6 +41,8 @@ Route::middleware('auth')->group(function(){
 
     Route::post('/category', [CategoryController::class, 'store'])->name('category.store');
     Route::patch('/category/{category}', [CategoryController::class, 'update'])->name('category.update');
+    Route::delete('/category/{category}', [CategoryController::class, 'destroy'])->name('category.destroy');
+    
     Route::post('/expense', [ExpenseController::class, 'store'])->name('expense.store');
 
     Route::get('/journal', [JournalController::class, 'index'])->name('journal.index');

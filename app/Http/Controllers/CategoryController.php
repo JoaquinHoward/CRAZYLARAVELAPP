@@ -68,8 +68,10 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Category $category)
     {
-        //
+        abort_if($category->user_id !== auth()->id(), 403);
+        $category->delete();
+        return back();
     }
 }

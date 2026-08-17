@@ -74,8 +74,22 @@
                                     <div style="color: #888; font-size: 0.85rem;">{{ \Carbon\Carbon::parse($expense->date)->format('M d, Y') }}</div>
                                 </div>
                             </div>
-                            <div style="font-weight: 700; font-size: 1.1rem; color: #fff;">
-                                PHP {{ number_format($expense->amount, 2) }}
+                            <div style="display: flex; align-items: center; gap: 1rem;">
+                                <div style="font-weight: 700; font-size: 1.1rem; color: #fff;">
+                                    PHP {{ number_format($expense->amount, 2) }}
+                                </div>
+                                <div style="display: flex; gap: 0.5rem;">
+                                    <button onclick="openEditExpenseModal({{ $expense->id }}, '{{ addslashes($expense->name) }}', {{ $expense->amount }}, '{{ \Carbon\Carbon::parse($expense->date)->format('Y-m-d') }}', {{ $expense->category_id }})" title="Edit Transaction" style="background: rgba(255,255,255,0.05); border: none; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #888; transition: all 0.2s ease;" onmouseover="this.style.color='#fff'; this.style.background='rgba(255,255,255,0.15)';" onmouseout="this.style.color='#888'; this.style.background='rgba(255,255,255,0.05)';">
+                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                                    </button>
+                                    <form action="/expense/{{ $expense->id }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this transaction?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" title="Delete Transaction" style="background: rgba(255,50,50,0.1); border: none; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #ff5555; transition: all 0.2s ease;" onmouseover="this.style.background='rgba(255,50,50,0.2)';" onmouseout="this.style.background='rgba(255,50,50,0.1)';">
+                                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     @endforeach
@@ -165,6 +179,50 @@
                 </form>
             </div>
         </div>
+        <!-- Edit Expense Modal -->
+        <div class="modal-overlay" id="editExpenseModal">
+            <div class="modal-content">
+                <button class="modal-close" id="closeEditExpenseModalBtn">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="24" height="24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+                <h2 class="modal-title">Edit Transaction</h2>
+                <form id="editExpenseForm" action="" method="POST">
+                    @csrf
+                    @method('PATCH')
+                    <div class="form-group">
+                        <div class="input-wrapper">
+                            <input type="text" id="editExpenseName" name="name" placeholder="Expense Name" required>
+                            <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-wrapper">
+                            <input type="number" id="editExpenseAmount" step="0.01" name="amount" placeholder="Amount (0.00)" required>
+                            <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-wrapper">
+                            <input type="date" id="editExpenseDate" name="date" required>
+                            <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-wrapper">
+                            <select id="editExpenseCategory" name="category_id" required style="width: 100%; background-color: var(--card-bg); border: 2px solid transparent; border-radius: 1rem; padding: 1.25rem 3.5rem 1.25rem 1.25rem; color: var(--text-main); font-size: 1rem; outline: none; transition: all 0.3s ease; font-family: inherit; appearance: none; cursor:pointer;">
+                                <option value="" disabled selected style="color: var(--text-muted);">Select Category</option>
+                                @foreach($categories as $category)
+                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                @endforeach
+                            </select>
+                            <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-submit">Save Changes</button>
+                </form>
+            </div>
+        </div>
+        
         <!-- Edit Category Modal -->
         <div class="modal-overlay" id="editCategoryModal">
             <div class="modal-content">
@@ -183,6 +241,11 @@
                     </div>
                     <button type="submit" class="btn-submit">Save</button>
                 </form>
+                <form id="deleteCategoryForm" method="POST" action="" onsubmit="return confirm('Are you sure you want to delete this category?');" style="margin-top: 1rem;">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn-submit" style="background-color: rgba(255,50,50,0.1); color: #ff5555; border: 1px solid rgba(255,50,50,0.2);">Delete Category</button>
+                </form>
             </div>
         </div>
 
@@ -194,8 +257,18 @@
     <!-- Script for modals -->
     <script>
 
+        window.openEditExpenseModal = function(id, name, amount, date, category_id) {
+            document.getElementById('editExpenseForm').action = '/expense/' + id;
+            document.getElementById('editExpenseName').value = name;
+            document.getElementById('editExpenseAmount').value = amount;
+            document.getElementById('editExpenseDate').value = date;
+            document.getElementById('editExpenseCategory').value = category_id;
+            document.getElementById('editExpenseModal').classList.add('active');
+        }
+
         window.openEditModal = function(id, name) {
             document.getElementById('editCategoryForm').action = '/category/' + id;
+            document.getElementById('deleteCategoryForm').action = '/category/' + id;
             document.getElementById('editCategoryNameInput').value = name;
             document.getElementById('editCategoryModal').classList.add('active');
         }
@@ -218,12 +291,12 @@
         document.addEventListener('DOMContentLoaded', function() {
             function setupModal(modalId, openBtnId, closeBtnId) {
                 const modal = document.getElementById(modalId);
-                const openBtn = document.getElementById(openBtnId);
+                const openBtn = openBtnId ? document.getElementById(openBtnId) : null;
                 const closeBtn = document.getElementById(closeBtnId);
 
-                if(!modal || !openBtn || !closeBtn) return;
+                if(!modal || !closeBtn) return;
 
-                openBtn.addEventListener('click', () => modal.classList.add('active'));
+                if (openBtn) openBtn.addEventListener('click', () => modal.classList.add('active'));
                 closeBtn.addEventListener('click', () => modal.classList.remove('active'));
                 modal.addEventListener('click', (e) => {
                     if (e.target === modal) modal.classList.remove('active');
@@ -238,6 +311,7 @@
 
             setupModal('categoryModal', 'openCategoryModalBtn', 'closeCategoryModalBtn');
             setupModal('expenseModal', 'openExpenseModalBtn', 'closeExpenseModalBtn');
+            setupModal('editExpenseModal', null, 'closeEditExpenseModalBtn');
         });
 
         
