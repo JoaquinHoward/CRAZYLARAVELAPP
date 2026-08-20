@@ -40,5 +40,5 @@ RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf
 # Expose port 80 to Render
 EXPOSE 80
 
-# Start Apache
-CMD ["apache2-foreground"]
+# Run database migrations, then start Apache
+CMD php artisan migrate --force && apache2-foreground
